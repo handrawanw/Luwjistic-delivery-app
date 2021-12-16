@@ -8,6 +8,7 @@ class Pengiriman {
         Kurir.findOne({status:"open"}).populate("user",["-password"]).then(async(data)=>{
             if(data){
                 let PengirimanUpdate=await PengirimanModel.findOneAndUpdate({_id:id_pengiriman,status_pengiriman:"pending"},{kurir:data.user,status_pengiriman:"sedang dikemas"},{new:true});
+                await Kurir.findOneAndUpdate({_id:data._id},{status:"close"});
                 if(PengirimanUpdate){
                     res.status(200).json({
                         message:`Kurir berhasil dipilih ${data.user.username} siap mengatar pesanan Order-${PengirimanUpdate._id}`,
